@@ -24,10 +24,7 @@ class SuccessRate(@Column(name = "testname", tag = true) var testName: String? =
 private data class MeasurementKey(val key: Double = Double.NaN, val limit: Instant)
 
 private class MeasurementValues(pairs: List<Pair<String, Double>>) {
-    private val values = mutableMapOf<String, Double>()
-    init {
-        values.putAll(pairs = pairs)
-    }
+    private val values = pairs.toMap()
     fun get(testname: String): Double? {
         return values[testname]
     }
@@ -131,9 +128,11 @@ private object QueryCounter {
     private var failureCount: Int = 0
     val shouldRetryFailedQuery: Boolean
         get() = failureCount < MAX_QUERY_RETRY_COUNT
+
     fun queryDidFail() {
         failureCount++
     }
+
     fun <R> maybeQuery(query: () -> R): R? {
         if (!QueryCounter.shouldRetryFailedQuery) {
             return null
