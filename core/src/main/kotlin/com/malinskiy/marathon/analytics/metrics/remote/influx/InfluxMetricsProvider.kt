@@ -39,8 +39,6 @@ class InfluxMetricsProvider(private val influxDb: InfluxDB,
     private val successRateMeasurements = mutableMapOf<MeasurementKey, MeasurementValues>()
     private val executionTimeMeasurements = mutableMapOf<MeasurementKey, MeasurementValues>()
 
-    private var successRateInitialized = false
-
     override fun successRate(test: Test, limit: Instant): Double {
         val key = MeasurementKey(limit = limit)
 
